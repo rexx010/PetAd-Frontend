@@ -98,10 +98,8 @@ const uploadWithProgress = (
         }
       } else {
         let message = `Request failed with status ${xhr.status}`;
-        try {
-          const json = JSON.parse(xhr.responseText);
-          if (json?.message) message = json.message;
-        } catch {}
+        const parsed = tryParseJson(xhr.responseText);
+        if (parsed?.message) message = parsed.message;
         reject(new ApiError(message, { status: xhr.status }));
       }
     });
@@ -124,6 +122,14 @@ const uploadWithProgress = (
     xhr.send(formData);
   });
 };
+
+function tryParseJson(text: string): Record<string, string> | null {
+  try {
+    return JSON.parse(text) as Record<string, string>;
+  } catch {
+    return null;
+  }
+}
 
 function getAuthHeader(): { Authorization?: string } {
   try {
