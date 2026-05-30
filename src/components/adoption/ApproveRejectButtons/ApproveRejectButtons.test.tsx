@@ -29,7 +29,9 @@ describe('ApproveRejectButtons', () => {
     mockUseRoleGuard.mockReturnValue({
       role: 'admin',
       isAdmin: true,
+      isShelter: false,
       isUser: false,
+      canApprove: true,
       hasAccess: vi.fn().mockReturnValue(true),
     });
 
@@ -61,7 +63,9 @@ describe('ApproveRejectButtons', () => {
       mockUseRoleGuard.mockReturnValue({
         role: 'user',
         isAdmin: false,
+        isShelter: false,
         isUser: true,
+        canApprove: false,
         hasAccess: vi.fn().mockReturnValue(false),
       });
 

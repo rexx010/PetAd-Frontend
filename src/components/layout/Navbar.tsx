@@ -1,17 +1,41 @@
 import { Link, useLocation } from "react-router-dom";
-import { House, Eye, List, Heart, ChevronDown } from "lucide-react";
+import { House, Eye, List, Heart, ChevronDown, ClipboardList } from "lucide-react";
 import logo from "../../assets/logo.svg";
 import owner from "../../assets/owner.png";
+import { PendingApprovalBadge } from "../badges/PendingApprovalBadge";
+import { useRoleGuard } from "../../hooks/useRoleGuard";
 import { NotificationCentreDropdown } from "../notifications";
 
-const navLinks = [
+const baseNavLinks = [
   { label: "Home", path: "/home", icon: House },
   { label: "Interests", path: "/interests", icon: Eye },
   { label: "Listings", path: "/listings", icon: List },
 ];
 
+type NavLink = {
+  label: string;
+  path: string;
+  icon: typeof House;
+  hasBadge?: boolean;
+};
+
 export function Navbar() {
   const location = useLocation();
+  const { canApprove, isAdmin } = useRoleGuard();
+
+  const navLinks: NavLink[] = [
+    ...baseNavLinks,
+    ...(canApprove
+      ? [
+          {
+            label: "Approvals",
+            path: isAdmin ? "/admin/approvals" : "/shelter/approvals",
+            icon: ClipboardList,
+            hasBadge: true,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
@@ -40,7 +64,10 @@ export function Navbar() {
               }`}
             >
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-              {link.label}
+              <span className="inline-flex items-center gap-2">
+                {link.label}
+                {link.hasBadge ? <PendingApprovalBadge /> : null}
+              </span>
             </Link>
           );
         })}

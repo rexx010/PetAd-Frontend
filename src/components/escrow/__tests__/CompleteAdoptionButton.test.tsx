@@ -25,7 +25,9 @@ beforeEach(() => {
   vi.mocked(useRoleGuard).mockReturnValue({
     role: "admin",
     isAdmin: true,
+    isShelter: false,
     isUser: false,
+    canApprove: true,
     hasAccess: vi.fn().mockReturnValue(true),
   });
 
@@ -49,7 +51,9 @@ describe("CompleteAdoptionButton", () => {
     vi.mocked(useRoleGuard).mockReturnValue({
       role: "user",
       isAdmin: false,
+      isShelter: false,
       isUser: true,
+      canApprove: false,
       hasAccess: vi.fn().mockReturnValue(false),
     });
     const { container } = render(<CompleteAdoptionButton {...defaultProps} />);
