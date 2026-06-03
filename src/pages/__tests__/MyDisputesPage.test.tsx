@@ -86,7 +86,7 @@ describe("MyDisputesPage", () => {
 
   it("renders empty state when user has no disputes", async () => {
     server.use(
-      http.get("*/disputes", () => {
+      http.get(/\/disputes/, () => {
         return HttpResponse.json({
           data: [],
         });

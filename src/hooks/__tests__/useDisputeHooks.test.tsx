@@ -41,7 +41,7 @@ describe("Dispute Hooks", () => {
       let requestedUrl = "";
       let requestedMethod = "";
       server.use(
-        http.post("*/disputes", ({ request }) => {
+        http.post(/\/disputes/, ({ request }) => {
           requestedUrl = request.url;
           requestedMethod = request.method;
           return HttpResponse.json({ adoptionId: "adoption-123" });
